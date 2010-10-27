@@ -1,0 +1,107 @@
+@charset "utf-8";
+/* CSS Document */
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, dl, dt, dd, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
+	border:0pt none;
+	font-family: Verdana, Arial, Geneva, Helvetica, sans-serif;
+	font-size:100%;
+	font-style:inherit;
+	font-weight:inherit;
+	margin:0pt;
+	outline-color:invert;
+	outline-style:none;
+	outline-width:0pt;
+	padding:0pt;
+	vertical-align:baseline;
+}
+body {
+	background:#142751 url(../images/bg.png) no-repeat;
+	margin-right: 50px;
+}
+
+a:link {
+	color: #fff;
+	text-decoration:underline;
+	text-shadow:none;
+}
+a:visited {
+	color:#0CF;
+	text-decoration:underline;
+	text-shadow:none;
+}
+#wrapper {
+	width: 100%;
+	min-height: 357px;
+	padding: 5px 15px;
+	color: #fff;
+}
+#wrapper h1 {
+	font-size:50px;
+	line-height:100px;
+	font-weight:bold;
+	text-shadow: 2px 2px 2px #000;
+}
+#wrapper h2 {
+	font-size:40px;
+	line-height:80px;
+	font-weight:bold;
+	text-shadow: 2px 2px 2px #000;
+}
+#wrapper p {
+	font-size: 35px;
+	line-height: 55px;
+	text-shadow: 2px 2px 2px #000;
+}
+#wrapper ul {
+	list-style-type: square;
+	padding: 5px 15px;
+	margin: 0px;
+}
+#wrapper li {
+	font-size: 35px;
+	line-height: 55px;
+	padding: 2px 0;
+}
+#featureList {
+	display:table;
+	width:100%;
+	margin: 10px 0;
+}
+#featureList .row {
+	display: table-row;
+	width:100%;
+}
+#featureList .featureIcon {
+	display:table-cell;
+	width: 20%;
+	min-height:55px;
+	float:left;
+	padding-bottom:15px;
+	text-align:center;
+}
+#featureList .featureIcon img {
+	-webkit-box-reflect: below 2px -webkit-gradient(linear, 100% 0%, 100% 100%, from(rgba(255, 255, 255, 0)), color-stop(0.5, transparent), to(rgba(255, 255, 255, 0.292969))) 0 0 0 0 stretch stretch;
+}
+#featureList .featureText {
+	display:table-cell;
+	width: 80%;
+	float:left;
+}
+#featureList .featureSpacer {
+	display:table-cell;
+	width: 100%;
+	float:left;
+	padding:0 0 5px 0;
+	margin:0 0 5px 0;
+	border-bottom: 1px groove #FFF;
+}
+.small_font {
+	font-size:30px;
+	-text-shadow:none;
+}
+
+
+td {
+	padding:3px;
+	border-bottom: 1px groove #FFF;
+}

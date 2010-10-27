@@ -1,0 +1,173 @@
+// Configuration:
+
+{
+	// Everything goes into a DOM structure, parser.dom, but elements are discarded after they are handled by a callback.
+	// When </series> is encountered, the content of the <series> element is passed to the callback and discarded.
+	"series": "parser:series:",
+	
+	"configuration": "parser:configuration:",
+
+	"dataset": "parser:dataset:",
+	
+	"record": "parser:record:",
+}
+
+
+- (void) parser:(XMLStreamParser*)parser record:(NSDictionary*)element
+{
+	parser.dom
+	
+}
+
+
+// Building a document:
+
+<chart>
+	<configuration>
+		<dateformat>
+		yyyyMMdd</dateformat>
+	</configuration>
+	<series>
+		<name>
+		2010</name>
+		<interval>
+
+
+
+*doc = nil
+keyStack = []
+dictStack = []
+isEmpty = YES
+
+
+<chart>
+
+doc = {
+	(*chart: nil)
+}
+keyStack = [ "chart" ]
+dictStack = [ doc ]
+isEmpty = YES
+
+
+	<configuration>		if (isEmpty) { dictStack.last[keyStack.last] = dictStack.push({}); } else ???	keyStack.push(localname); isEmpty = YES;
+	
+doc = {
+	chart: {
+		(*configuration: nil)
+	}
+}
+keyStack = [ "chart", "configuration" ]
+dictStack = [ doc, doc.chart ]
+isEmpty = YES
+
+	
+		<dateformat>	if (isEmpty) { dictStack.last[keyStack.last] = dictStack.push({}); } else ???	keyStack.push(localname); isEmpty = YES;
+
+doc = {
+	chart: {
+		configuration: {
+			(*dateformat: nil)
+		}
+	}
+}
+keyStack = [ "chart", "configuration", "dateformat" ]
+dictStack = [ doc, doc.chart, doc.chart.configuration ]
+isEmpty = YES
+
+		
+		yyyyMMdd</dateformat>	if (isEmpty) { dictStack.last[keyStack.last] = consumeString() }	keyStack.pop(); dictStack.pop(); isEmpty = NO;
+
+doc = {
+	chart: {
+		*configuration: {
+			dateformat: "yyyyMMdd"
+		}
+	}
+}
+keyStack = [ "chart", "configuration" ]
+dictStack = [ doc, doc.chart ]
+isEmpty = NO
+
+
+	</configuration>	if (isEmpty) { ...}		keyStack.pop(); dictStack.pop(); isEmpty = NO;
+
+doc = {
+	*chart: {
+		configuration: {
+			dateformat: "yyyyMMdd"
+		}
+	}
+}
+keyStack = [ "chart" ]
+dictStack = [ doc ]
+isEmpty = NO
+
+	<series>	if (isEmpty) { ... } else { dictStack.push(dictStack.last[keyStack.last]) }	keyStack.push(localname); isEmpty = YES;
+
+{
+	chart:
+	{
+		configuration:
+		{
+			dateformat: "yyyyMMdd"
+		},
+		(*series: nil)
+	}
+}
+keyStack = [ "chart", "series" ]
+dictStack = [ doc, doc.chart ]
+isEmpty = YES
+
+		<name>
+
+{
+	chart:
+	{
+		configuration:
+		{
+			dateformat: "yyyyMMdd"
+		},
+		series:
+		{
+			*name: nil
+		}
+	}
+}
+
+		2010</name>
+
+{
+	chart:
+	{
+		configuration:
+		{
+			dateformat: "yyyyMMdd"
+		},
+		*series:
+		{
+			name: "2010"
+		}
+	}
+}
+
+		<interval>
+
+{
+	chart:
+	{
+		configuration:
+		{
+			dateformat: "yyyyMMdd"
+		},
+		series:
+		{
+			name: "2010",
+			*interval: nil
+		}
+	}
+}
+
+
+
+

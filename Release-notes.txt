@@ -1,0 +1,87 @@
+
+Release Notes: Water Storage iPhone App
+=======================================
+
+
+v1.0 -- Tue 19 Oct 2010
+
+Submitted for App Store approval.
+
+* All places are now ranked in descending order of total storage capacity.
+* The table now displays the available volume for each place, instead of change since previous day.
+* A "Loading..." indicator has been added to the detail view.
+* The "change since" display now defaults to last year instead of previous day.
+* Chart labels are now more legible.
+* Data loads more quickly, using the new "mobile data" XML feed.
+* The About tab now contains Features, Copyright and Disclaimer pages.
+* Updates for iOS4 compatibility.
+
+
+v0.8 -- Wed 4 Aug 2010
+
+Before installing this release, delete any previous version from your device. Otherwise you will have two different versions installed simultaneously. This is because the "bundle identifier" for this release has changed in preparation for App Store submission.
+
+* Fixed a crash on scrolling while loading data.
+* Fixed update of displayed table information on reload.
+* Fixed the appearance of the Favourites table after editing.
+* Extra icon resolutions for iPhone 4 Home screen and search results.
+* The app now ships with all current place names but no observations. 
+* Packaging updated to pass App Store validation.
+
+
+v0.7 -- Mon 12 July 2010
+
+Internal release, for testing and feedback.
+
+* Integrated landscape fullscreen interactive charts.
+* Updates for iOS4 multitasking.
+* Search keyword matches any word in the place name.
+* Improved scrolling performance.
+* Improved accessibility with VoiceOver.
+
+
+v0.6 -- Mon 28 Jun 2010
+
+Internal release, for testing and feedback.
+
+* Fixed an infrequent crash when loading data.
+* Fixed a precision issue with large volume values.
+* The About page now links to an iPhone-specific web page.
+
+
+
+v0.5 -- Mon 21 Jun 2010
+
+Internal release, for testing and feedback.
+
+* Updated visual assets to more closely match Bureau / Water Division branding.
+* Charts are implemented.
+* The UI remains responsive throughout loading of data.
+* Empty Nearby tab has been removed.
+* The data source is now http://water.bom.gov.au/
+* No VPN connection is required.
+* Data is now refreshed if more than 6 hours old.
+
+Known issues:
+
+* The web link in the About page currently links to generic Water Storage information, as an iPhone-specific page has not yet been published.
+
+
+
+Previous releases:
+
+v0.3 -- Wed 26 May 2010
+
+Internal release to key stakeholders, for testing and feedback.
+
+* The chart is a static placeholder image.
+* The Nearby tab is not yet implemented.
+* The default data source is the UAT database: http://cdcvt-awzweb01.bom.gov.au:8080/waterstorage/
+* The application includes a current snapshot of the UAT database.
+* A VPN connection to the Bureau intranet is required in order to receive data updates.
+
+Known issues:
+
+* The About screen should link to http://www.bom.gov.au/water/waterstorage/copyright.php to acknowledge the sources of information.
+* The splash screen disappears too quickly.
+

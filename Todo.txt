@@ -1,0 +1,28 @@
+
+User Visible
+------------
+
+* Faster PlaceCell drawing: http://blog.atebits.com/2008/12/fast-scrolling-in-tweetie-with-uitableview/
+* Make observation grey if it is more than 6 hours old.
+* Change the "use the * button to add favourites", people get confused. Or add Add button in Favourites tab.
+* Make current year / previous year more obvious
+* Performance: Use multiple persistent store coordinators?
+
+
+Release Test Checklist
+----------------------
+
+* Use valgrind
+* Instruments leak check
+* NSZombie
+* Check all the FIXMEs
+
+
+Release Checklist
+-----------------
+
+* Update Places.sqlite with Get Fresh Places.
+* Bump bundle version number in Slake-Info.plist.
+* Tag the release.
+* Build and Archive, distribute the IPA
+

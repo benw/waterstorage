@@ -1,0 +1,32 @@
+[
+	{
+		"singular":		"",
+		"plural":		"",
+		"urn":			"urn:bom.gov.au:awris:common:codelist:regiontype:country",
+		"priority":		10
+	},
+	{
+		"singular":		"State",
+		"plural":		"States",
+		"urn":			"urn:bom.gov.au:awris:common:codelist:regiontype:state",
+		"priority":		20
+	},
+	{
+		"singular":		"Drainage Division",
+		"plural":		"Drainage Divisions",
+		"urn":			"urn:bom.gov.au:awris:common:codelist:regiontype:drainagedivision",
+		"priority":		45
+	},
+	{
+		"singular":		"City / System",
+		"plural":		"Cities and Systems",
+		"urn":			"urn:bom.gov.au:awris:common:codelist:regiontype:city",
+		"priority":		40
+	},
+	{
+		"singular":		"Water Storage",
+		"plural":		"Water Storages",
+		"urn":			"urn:bom.gov.au:awris:common:codelist:featuretype:waterstorage",
+		"priority":		50
+	}
+]
