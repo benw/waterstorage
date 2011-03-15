@@ -48,6 +48,9 @@
 NSString* const kHostName = @"water.bom.gov.au";
 NSString* const kBaseURL = @"http://water.bom.gov.au/waterstorage/";
 
+// flag for model fix stored in store to address corrupted data problem
+NSString* const kCustomMetadataModelFixedChartDeleteRule = @"ChartDeletionRuleInModelFixed";
+
 @interface DataManager ()	// private
 
 @property (nonatomic, retain) id <DataRequestProtocol> requestInProgress;
@@ -418,17 +421,32 @@ static const NSTimeInterval expireSeconds = 6 * 60 * 60;	// 6hr
 							 nil];
 	
 	BOOL happy = NO;
-
+	NSURL* storeURL = [self storeURL];
+	
 #ifdef GET_FRESH_PLACES
 	// GET_FRESH_PLACES is used to load a clean database containing
 	// only Places, no observations or charts.
 	// Start with a blank store and load everything.
 #else
-    happy = [persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
+	
+	NSDictionary *metadata = [NSPersistentStoreCoordinator
+							  metadataForPersistentStoreOfType:NSSQLiteStoreType URL:storeURL error:&error];
+	if (metadata == nil) {
+		NSLog(@"Error accessing store metadata: %@", error);
+	}
+	else if (![metadata objectForKey:kCustomMetadataModelFixedChartDeleteRule]) 
+	{
+		//possibly a corrupted store, wipe it out and install fresh one from bundle
+		NSLog(@"Current store may contain places with broken reference to chart, starting with fresh store...");
+		[self installDefaultStore];
+	}
+	
+	happy = [persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
 													 configuration:nil
-															   URL:[self storeURL]
+															   URL:storeURL
 														   options:options
 															 error:&error] != nil;
+	
 	if (!happy) {
 		// This occurs when the model changes.
 		// We revert to the default store and try again.
@@ -436,7 +454,7 @@ static const NSTimeInterval expireSeconds = 6 * 60 * 60;	// 6hr
 		error = nil;
 		happy = [persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
 														 configuration:nil
-																   URL:[self storeURL]
+																   URL:storeURL
 															   options:options
 																 error:&error] != nil;
 	}
@@ -450,17 +468,27 @@ static const NSTimeInterval expireSeconds = 6 * 60 * 60;	// 6hr
 		NSLog(@"DEBUG Removed the store.");
 		
 		error = nil;
-		happy = [persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
-														 configuration:nil
-																   URL:[self storeURL]
-															   options:options
-																 error:&error] != nil;
+		NSPersistentStore* store = 
+		[persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
+												 configuration:nil
+														   URL:storeURL
+													   options:options
+														 error:&error];
+		happy = store != nil;
+		if (happy) {
+			//Set the custom key-pair in the store, regarding model fix
+			NSDictionary* metadata = [persistentStoreCoordinator metadataForPersistentStore:store];
+			NSMutableDictionary* newMetadata = [[metadata mutableCopy] autorelease];
+			[newMetadata setObject:@"YES" forKey:kCustomMetadataModelFixedChartDeleteRule];
+			[persistentStoreCoordinator setMetadata:newMetadata forPersistentStore:store];
+			NSLog(@"DEBUG Created new store and saved flag in metadata: %@", kCustomMetadataModelFixedChartDeleteRule);
+		}
 	}
 	if (!happy) {
 		// Really not happy.
 		NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
 		abort();
-    }    
+    }
 	
     return persistentStoreCoordinator;
 }

@@ -52,6 +52,7 @@
 
 - (void)dealloc
 {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[favouritesHelpView release];
     [super dealloc];
 }
@@ -74,15 +75,19 @@
 	[[NSBundle mainBundle] loadNibNamed:@"FavouritesHelp" owner:self options:nil];
 }
 
-
-- (void)viewWillAppear:(BOOL)animated
+//notification is passed when this method is called from an event
+- (void)loadDataIfNeeded:(NSNotification*)notification
 {
-	[[DataManager manager] clearQueue];
 	Favourites* favourites = [Favourites favourites];
 	for (int i = 0; i < [favourites count]; i++) {
 		[[DataManager manager] loadPlace:[favourites itemAtIndex:i] entire:NO force:NO];
 	}
-	
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+	[[DataManager manager] clearQueue];
+	[self loadDataIfNeeded:nil];
     [super viewWillAppear:animated];
 	[self.tableView reloadData];
 
@@ -90,6 +95,10 @@
 		[self.view.superview addSubview:favouritesHelpView];
 	}
 	[self itemCountChanged];
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(loadDataIfNeeded:)
+												 name:UIApplicationDidBecomeActiveNotification
+											   object:nil];
 }
 
 /*
@@ -107,6 +116,7 @@
 
 - (void)viewDidDisappear:(BOOL)animated
 {
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
 	[super viewDidDisappear:animated];
 	self.editing = NO;
 }

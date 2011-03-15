@@ -40,7 +40,6 @@
 @protocol LandscapeViewControllerDelegate <NSObject>
 
 - (void)landscapeViewControllerDidAppear;
-- (void)landscapeViewControllerDidDisappear;
 
 @end
 
@@ -53,12 +52,6 @@
 	ChartViewController* _chartViewController;
 	UIView* _valuesOverlay;
 	BOOL _valuesOverlayIsVisible;
-	UILabel* _currentYearDate;
-	UILabel* _currentYearPercentage;
-	UILabel* _currentYearVolume;
-	UILabel* _lastYearDate;
-	UILabel* _lastYearPercentage;
-	UILabel* _lastYearVolume;
 	UILabel* _chartTotalCapacityLabel;
 	UILabel* _chartTotalCapacityPercentageLabel;
 
@@ -68,12 +61,6 @@
 @property (nonatomic, retain) IBOutlet UINavigationItem* titleNavigationItem;
 @property (nonatomic, retain) IBOutlet ChartViewController* chartViewController;
 @property (nonatomic, retain) IBOutlet UIView* valuesOverlay;
-@property (nonatomic, retain) IBOutlet UILabel* currentYearDate;
-@property (nonatomic, retain) IBOutlet UILabel* currentYearPercentage;
-@property (nonatomic, retain) IBOutlet UILabel* currentYearVolume;
-@property (nonatomic, retain) IBOutlet UILabel* lastYearDate;
-@property (nonatomic, retain) IBOutlet UILabel* lastYearPercentage;
-@property (nonatomic, retain) IBOutlet UILabel* lastYearVolume;
 @property (nonatomic, retain) IBOutlet UILabel* chartTotalCapacityLabel;
 @property (nonatomic, retain) IBOutlet UILabel* chartTotalCapacityPercentageLabel;
 

@@ -58,6 +58,17 @@
 	[encoder encodeObject:self.unit forKey:@"unit"];
 }
 
++ (Measurement*)measurementWithUnit:(NSString*)unit value:(double)value
+{
+	Measurement* m = [[[Measurement alloc] init] autorelease];
+	if (m)
+	{
+		m.unit = unit;
+		m.value = value;
+	}
+	return m;
+}
+
 // Returns the measurement formatted as a percentage.
 - (NSString*) textAsPercentageForceSign:(BOOL)forceSign
 {

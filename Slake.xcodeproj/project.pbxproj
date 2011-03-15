@@ -82,7 +82,6 @@
 		BEB71EA81123C41F008FC2B1 /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = BEB71EA21123C41F008FC2B1 /* SBJsonWriter.m */; };
 		BEB71EFC1123D1F8008FC2B1 /* PlaceDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BEB71EFA1123D1F8008FC2B1 /* PlaceDetailViewController.m */; };
 		BEC1C8D4117D786600B7BCB3 /* FavouriteToggleButtonController.m in Sources */ = {isa = PBXBuildFile; fileRef = BEC1C8D3117D786600B7BCB3 /* FavouriteToggleButtonController.m */; };
-		BEC5A587118FE7AE00A066E8 /* ChartViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BEC5A586118FE7AE00A066E8 /* ChartViewController.m */; };
 		BEC9482D118A582B00441F99 /* DataManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BEC9482C118A582B00441F99 /* DataManager.m */; };
 		BECDB275116D52E60039539E /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BECDB273116D52E60039539E /* AboutViewController.m */; };
 		BECDB276116D52E60039539E /* AboutView.xib in Resources */ = {isa = PBXBuildFile; fileRef = BECDB274116D52E60039539E /* AboutView.xib */; };
@@ -99,6 +98,17 @@
 		BEF9CEF9113B23C300998428 /* Places.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = BEF9CEF8113B23C300998428 /* Places.xcdatamodel */; };
 		BEF9CF20113B2AA500998428 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BEF9CF1F113B2AA500998428 /* CoreData.framework */; };
 		F316259D1191665200B40280 /* libCorePlot-CocoaTouch.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F385C5C0118E97AD00E37A00 /* libCorePlot-CocoaTouch.a */; };
+		F37A271813133E6D00DE434A /* about-over@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F37A271713133E6D00DE434A /* about-over@2x.png */; };
+		F37A271D1313451F00DE434A /* tab-australia@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F37A271C1313451F00DE434A /* tab-australia@2x.png */; };
+		F37A27241313476500DE434A /* tab-about@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F37A27201313476500DE434A /* tab-about@2x.png */; };
+		F37A27251313476500DE434A /* tab-nearby@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F37A27211313476500DE434A /* tab-nearby@2x.png */; };
+		F37A27261313476500DE434A /* tab-search@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F37A27221313476500DE434A /* tab-search@2x.png */; };
+		F37A27271313476500DE434A /* tab-star@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F37A27231313476500DE434A /* tab-star@2x.png */; };
+		F37A273713134A5C00DE434A /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F37A273613134A5C00DE434A /* Default@2x.png */; };
+		F37A274213134D1900DE434A /* fav-star-big@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F37A273E13134D1900DE434A /* fav-star-big@2x.png */; };
+		F37A274313134D1900DE434A /* fav-star-help@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F37A273F13134D1900DE434A /* fav-star-help@2x.png */; };
+		F37A274413134D1900DE434A /* favstar_off@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F37A274013134D1900DE434A /* favstar_off@2x.png */; };
+		F37A274513134D1900DE434A /* favstar_on@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F37A274113134D1900DE434A /* favstar_on@2x.png */; };
 		F385C5D3118EA70800E37A00 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F385C5D2118EA70800E37A00 /* QuartzCore.framework */; };
 		F38B995D11AA5D6700DC3EF3 /* ChartParser.m in Sources */ = {isa = PBXBuildFile; fileRef = F38B995C11AA5D6700DC3EF3 /* ChartParser.m */; };
 		F38B9D4C11ACEBE600DC3EF3 /* ChartDataset.m in Sources */ = {isa = PBXBuildFile; fileRef = F316272111977E1800B40280 /* ChartDataset.m */; };
@@ -106,6 +116,8 @@
 		F38B9D4E11ACEBFA00DC3EF3 /* ChartSeries.m in Sources */ = {isa = PBXBuildFile; fileRef = F316272511977E1800B40280 /* ChartSeries.m */; };
 		F38B9D4F11ACEC0100DC3EF3 /* Chart.m in Sources */ = {isa = PBXBuildFile; fileRef = F316272711977E1800B40280 /* Chart.m */; };
 		F3BA6CA011E44CD9004D8118 /* CalendarHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = F3BA6C9F11E44CD9004D8118 /* CalendarHelpers.m */; };
+		F3E3CE1412DEC3AD00DA2A82 /* ChartObservation.m in Sources */ = {isa = PBXBuildFile; fileRef = F3E3CE1312DEC3AD00DA2A82 /* ChartObservation.m */; };
+		F3E3CE7912DFF14600DA2A82 /* ChartViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BEC5A586118FE7AE00A066E8 /* ChartViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -274,12 +286,25 @@
 		F316272611977E1800B40280 /* Chart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Chart.h; path = Classes/Chart.h; sourceTree = "<group>"; };
 		F316272711977E1800B40280 /* Chart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Chart.m; path = Classes/Chart.m; sourceTree = "<group>"; };
 		F316276F11993B2F00B40280 /* ChartParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChartParser.h; sourceTree = "<group>"; };
+		F37A271713133E6D00DE434A /* about-over@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "about-over@2x.png"; path = "images/about-over@2x.png"; sourceTree = "<group>"; };
+		F37A271C1313451F00DE434A /* tab-australia@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "tab-australia@2x.png"; path = "images/tab-australia@2x.png"; sourceTree = "<group>"; };
+		F37A27201313476500DE434A /* tab-about@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "tab-about@2x.png"; path = "images/tab-about@2x.png"; sourceTree = "<group>"; };
+		F37A27211313476500DE434A /* tab-nearby@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "tab-nearby@2x.png"; path = "images/tab-nearby@2x.png"; sourceTree = "<group>"; };
+		F37A27221313476500DE434A /* tab-search@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "tab-search@2x.png"; path = "images/tab-search@2x.png"; sourceTree = "<group>"; };
+		F37A27231313476500DE434A /* tab-star@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "tab-star@2x.png"; path = "images/tab-star@2x.png"; sourceTree = "<group>"; };
+		F37A273613134A5C00DE434A /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "images/Default@2x.png"; sourceTree = "<group>"; };
+		F37A273E13134D1900DE434A /* fav-star-big@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "fav-star-big@2x.png"; path = "images/fav-star-big@2x.png"; sourceTree = "<group>"; };
+		F37A273F13134D1900DE434A /* fav-star-help@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "fav-star-help@2x.png"; path = "images/fav-star-help@2x.png"; sourceTree = "<group>"; };
+		F37A274013134D1900DE434A /* favstar_off@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "favstar_off@2x.png"; path = "images/favstar_off@2x.png"; sourceTree = "<group>"; };
+		F37A274113134D1900DE434A /* favstar_on@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "favstar_on@2x.png"; path = "images/favstar_on@2x.png"; sourceTree = "<group>"; };
 		F385C5BA118E97AD00E37A00 /* CorePlot-CocoaTouch.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "CorePlot-CocoaTouch.xcodeproj"; path = "core-plot/framework/CorePlot-CocoaTouch.xcodeproj"; sourceTree = SOURCE_ROOT; };
 		F385C5D2118EA70800E37A00 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		F38B995C11AA5D6700DC3EF3 /* ChartParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChartParser.m; sourceTree = "<group>"; };
 		F38B9B5611ABC22100DC3EF3 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		F3BA6C9E11E44CD9004D8118 /* CalendarHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CalendarHelpers.h; sourceTree = "<group>"; };
 		F3BA6C9F11E44CD9004D8118 /* CalendarHelpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CalendarHelpers.m; sourceTree = "<group>"; };
+		F3E3CE1212DEC3AD00DA2A82 /* ChartObservation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChartObservation.h; sourceTree = "<group>"; };
+		F3E3CE1312DEC3AD00DA2A82 /* ChartObservation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChartObservation.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -346,6 +371,8 @@
 				BE0BA9DA124865E6001115FF /* AboutWebViewController.m */,
 				BEC1C8D2117D786600B7BCB3 /* FavouriteToggleButtonController.h */,
 				BEC1C8D3117D786600B7BCB3 /* FavouriteToggleButtonController.m */,
+				F3E3CE1212DEC3AD00DA2A82 /* ChartObservation.h */,
+				F3E3CE1312DEC3AD00DA2A82 /* ChartObservation.m */,
 				BEC5A585118FE7AE00A066E8 /* ChartViewController.h */,
 				BEC5A586118FE7AE00A066E8 /* ChartViewController.m */,
 				BE337617119CD7EC005951C6 /* SearchViewController.h */,
@@ -458,6 +485,7 @@
 			children = (
 				BEE10BE8126D0D7A009BB640 /* about-bg.png */,
 				BE911E711153660E008B9075 /* Default.png */,
+				F37A273613134A5C00DE434A /* Default@2x.png */,
 				BE83DABA11CF016A007FFAF3 /* iTunesArtwork */,
 				BE9B68C211558DA500715895 /* Icon.png */,
 				BEECADA811F0397400FCDDB0 /* Icon-Small.png */,
@@ -470,8 +498,11 @@
 				5085FE9F11CA07C30012CAEE /* chart-footer.png */,
 				50029F4711ABA8D600D4B905 /* water-full.png */,
 				508F783611AB8B7B00F5627D /* about-over.png */,
+				F37A271713133E6D00DE434A /* about-over@2x.png */,
 				508F780111AB7CFE00F5627D /* fav-star-big.png */,
+				F37A273E13134D1900DE434A /* fav-star-big@2x.png */,
 				508F780211AB7CFE00F5627D /* fav-star-help.png */,
+				F37A273F13134D1900DE434A /* fav-star-help@2x.png */,
 				50BF6B8A11AA609000FA771C /* search-cell-bg-selected.png */,
 				50BF6B8B11AA609000FA771C /* search-cell-bg.png */,
 				50D109BB11AA44C100DB21AC /* superfluous.png */,
@@ -486,12 +517,19 @@
 				22DC4A7E11A516AC00759395 /* table-volumebar-bg.png */,
 				22353F5011A4A02E00F1CB04 /* table-cell-bg.png */,
 				BEEE96D811879AAB00C15EAE /* favstar_off.png */,
+				F37A274013134D1900DE434A /* favstar_off@2x.png */,
 				BEEE96D911879AAB00C15EAE /* favstar_on.png */,
+				F37A274113134D1900DE434A /* favstar_on@2x.png */,
 				50D10A4011AA4EA400DB21AC /* tab-search.png */,
+				F37A27221313476500DE434A /* tab-search@2x.png */,
 				50D10A3611AA4DF800DB21AC /* tab-star.png */,
+				F37A27231313476500DE434A /* tab-star@2x.png */,
 				BE337558119A3D1B005951C6 /* tab-about.png */,
+				F37A27201313476500DE434A /* tab-about@2x.png */,
 				BECDB3C6116D90720039539E /* tab-nearby.png */,
+				F37A27211313476500DE434A /* tab-nearby@2x.png */,
 				BE911E731153679F008B9075 /* tab-australia.png */,
+				F37A271C1313451F00DE434A /* tab-australia@2x.png */,
 			);
 			name = Images;
 			sourceTree = "<group>";
@@ -574,6 +612,7 @@
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Slake" */;
 			compatibilityVersion = "Xcode 3.1";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
 				English,
@@ -658,6 +697,17 @@
 				BE22E793123F52C100930459 /* about in Resources */,
 				BE0BA9D6124865D2001115FF /* AboutWebView.xib in Resources */,
 				BEE10BE9126D0D7A009BB640 /* about-bg.png in Resources */,
+				F37A271813133E6D00DE434A /* about-over@2x.png in Resources */,
+				F37A271D1313451F00DE434A /* tab-australia@2x.png in Resources */,
+				F37A27241313476500DE434A /* tab-about@2x.png in Resources */,
+				F37A27251313476500DE434A /* tab-nearby@2x.png in Resources */,
+				F37A27261313476500DE434A /* tab-search@2x.png in Resources */,
+				F37A27271313476500DE434A /* tab-star@2x.png in Resources */,
+				F37A273713134A5C00DE434A /* Default@2x.png in Resources */,
+				F37A274213134D1900DE434A /* fav-star-big@2x.png in Resources */,
+				F37A274313134D1900DE434A /* fav-star-help@2x.png in Resources */,
+				F37A274413134D1900DE434A /* favstar_off@2x.png in Resources */,
+				F37A274513134D1900DE434A /* favstar_on@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -687,7 +737,6 @@
 				BE1C218311788B74007A638D /* PlaceCell.m in Sources */,
 				BEC1C8D4117D786600B7BCB3 /* FavouriteToggleButtonController.m in Sources */,
 				BEC9482D118A582B00441F99 /* DataManager.m in Sources */,
-				BEC5A587118FE7AE00A066E8 /* ChartViewController.m in Sources */,
 				BE24035E1193EE1400A47257 /* XMLStreamParser.m in Sources */,
 				BE337638119CE091005951C6 /* SearchViewController.m in Sources */,
 				BE337745119D1AB5005951C6 /* PlaceTableViewController.m in Sources */,
@@ -713,6 +762,8 @@
 				BE83DBCE11D04C82007FFAF3 /* LandscapeViewController.m in Sources */,
 				F3BA6CA011E44CD9004D8118 /* CalendarHelpers.m in Sources */,
 				BE0BA9DB124865E6001115FF /* AboutWebViewController.m in Sources */,
+				F3E3CE1412DEC3AD00DA2A82 /* ChartObservation.m in Sources */,
+				F3E3CE7912DFF14600DA2A82 /* ChartViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -750,7 +801,6 @@
 					"-lxml2",
 				);
 				PRODUCT_NAME = WaterStorage;
-				SDKROOT = iphoneos4.0;
 			};
 			name = Debug;
 		};
@@ -777,7 +827,6 @@
 				);
 				PRODUCT_NAME = WaterStorage;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "7AF56A79-7D0D-40C6-AB2B-BC392C27A6DC";
-				SDKROOT = iphoneos4.0;
 			};
 			name = Release;
 		};
@@ -791,7 +840,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
 				PREBINDING = NO;
-				SDKROOT = iphoneos4.0;
+				SDKROOT = iphoneos;
 			};
 			name = "Get Fresh Places";
 		};
@@ -819,7 +868,6 @@
 					"-lxml2",
 				);
 				PRODUCT_NAME = WaterStorage;
-				SDKROOT = iphoneos4.0;
 			};
 			name = "Get Fresh Places";
 		};
@@ -833,7 +881,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
 				PREBINDING = NO;
-				SDKROOT = iphoneos4.0;
+				SDKROOT = iphoneos;
 			};
 			name = Debug;
 		};
@@ -848,7 +896,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
 				PREBINDING = NO;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
-				SDKROOT = iphoneos4.0;
+				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;

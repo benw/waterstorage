@@ -301,10 +301,7 @@ Measurement* measurementForElement(id element)
 			if (!number) {
 				return nil;
 			}
-			Measurement* measurement = [[[Measurement alloc] init] autorelease];
-			measurement.value = [number doubleValue];
-			measurement.unit = unit;
-			return measurement;
+			return [Measurement measurementWithUnit:unit value:[number doubleValue]];
 		}
 	}
 	return nil;

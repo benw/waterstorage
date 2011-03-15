@@ -56,6 +56,7 @@
 
 - (BOOL)isSatisfied
 {
+#ifndef GET_FRESH_PLACES
 	if (!self.place.completeLoadDate || !self.place.obsCurrent.loadDate) {
 		return NO;
 	}
@@ -79,6 +80,9 @@
 		// Unforced load is satisfied if it was loaded "recently enough"
 		return [DataManager dateIsRecentEnough:date];
 	}
+#else
+	return (self.place.completeLoadDate != nil);
+#endif
 }
 
 - (BOOL)isClearable

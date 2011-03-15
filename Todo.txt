@@ -12,6 +12,8 @@ User Visible
 Release Test Checklist
 ----------------------
 
+* Use build and analyse
+* Run on iOS 3.0 to check that no unrecognized selector exception is thrown
 * Use valgrind
 * Instruments leak check
 * NSZombie
@@ -22,7 +24,7 @@ Release Checklist
 -----------------
 
 * Update Places.sqlite with Get Fresh Places.
-* Bump bundle version number in Slake-Info.plist.
+* Bump bundle version number and get info string in Slake-Info.plist.
 * Tag the release.
 * Build and Archive, distribute the IPA
 

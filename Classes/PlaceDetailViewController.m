@@ -159,7 +159,10 @@ static enum ChangePeriod currentChangePeriod = kChangePeriodYear;
 	if ((self = [super initWithNibName:@"PlaceDetailView" bundle:nil])) {
 		self.place = place;
 
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(objectsDidChangeNotification:) name:NSManagedObjectContextObjectsDidChangeNotification object:[_place managedObjectContext]];
+		[[NSNotificationCenter defaultCenter] addObserver:self
+												 selector:@selector(objectsDidChangeNotification:)
+													 name:NSManagedObjectContextObjectsDidChangeNotification
+												   object:[_place managedObjectContext]];
 		self.title = _place.longName;
 
 		NSManagedObjectContext* context = [_place managedObjectContext];
@@ -269,19 +272,32 @@ static enum ChangePeriod currentChangePeriod = kChangePeriodYear;
 	return YES;
 }
 
+//notification is passed when this method is called from an event
+- (void)loadDataIfNeeded:(NSNotification*)notification
+{
+	[[DataManager manager] loadPlace:self.place entire:YES force:NO];
+	[[DataManager manager] loadChartForPlace:self.place force:NO];
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
 	[[DataManager manager] clearQueue];
-	[[DataManager manager] loadPlace:self.place entire:YES force:NO];
-	[[DataManager manager] loadChartForPlace:self.place force:NO];
+	[self loadDataIfNeeded:nil];
+
 	[self.chartViewController viewWillAppear:animated];
 
-	[[UIApplication sharedApplication] addObserver:self forKeyPath:@"networkActivityIndicatorVisible" options:NSKeyValueObservingOptionInitial context:nil];
+	[[UIApplication sharedApplication] addObserver:self
+										forKeyPath:@"networkActivityIndicatorVisible"
+										   options:NSKeyValueObservingOptionInitial
+										   context:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(loadDataIfNeeded:)
+												 name:UIApplicationDidBecomeActiveNotification
+											   object:nil];
 	[self updatePlaceDetailsAnimated:NO];
 	[self setWaterPositionForView:self.mainWaterView percentage:0.0f];
 	[self setWaterPositionForView:self.secondaryWaterView percentage:0.0f];
 	[super viewWillAppear:animated];
-	self.viewIsActive = YES;
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
@@ -297,19 +313,27 @@ static enum ChangePeriod currentChangePeriod = kChangePeriodYear;
 	[self.chartViewController viewDidAppear:animated];
 	[self updatePlaceDetailsAnimated:animated];
 	[self becomeFirstResponder];
+	self.viewIsActive = YES;
+	// For the cases where the user switches to landscape while navigating to a different place and where
+	// the user switches to portrait and back to landscape while the modal view controller is still disappearing
+	// Because presenting a modal view controller while this view controller is being loaded
+	// causes will/did (dis)appear inconsistencies, there is a lapse of time where no place detail 
+	// view controller has viewIsActive == YES. If we missed a rotation event, then we check orientation now.
+	[self checkAndShowLandscapeChartIfNeeded];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+	self.viewIsActive = NO;
 	[self.chartViewController viewWillDisappear:animated];
-	[[UIApplication sharedApplication] removeObserver:self forKeyPath:@"networkActivityIndicatorVisible"];
 	[super viewWillDisappear:animated];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
-	self.viewIsActive = NO;
 	[super viewDidDisappear:animated];
+	[[UIApplication sharedApplication] removeObserver:self forKeyPath:@"networkActivityIndicatorVisible"];
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
 	[self.chartViewController viewDidDisappear:animated];
 }
 
@@ -426,15 +450,6 @@ static enum ChangePeriod currentChangePeriod = kChangePeriodYear;
 	[self checkAndShowLandscapeChartIfNeeded];
 }
 
-- (void)landscapeViewControllerDidDisappear
-{
-	// For the case where the user switches to portrait and back to landscape while the
-	// modal view controller is still disappearing. It is not possible to present a modal
-	// view controller while one is still disappearing, so this callback lets us present
-	// it when the old one has finished disappearing.
-	[self checkAndShowLandscapeChartIfNeeded];
-}
-
 - (void)orientationChanged:(NSNotification *)notification
 {
 	[self checkAndShowLandscapeChartIfNeeded];
@@ -479,9 +494,6 @@ static enum ChangePeriod currentChangePeriod = kChangePeriodYear;
 	 self.chartTotalCapacityPercentageLabel.frame.size.width, 
 	 self.chartTotalCapacityPercentageLabel.frame.size.height);
 	 */
-	Measurement* m = [[[Measurement alloc] init] autorelease];
-	m.value = [_place.chart.yMax doubleValue];
-	m.unit = _place.obsCurrent.capacity.unit;
 	if (_place.chart.yMax && fabs(_place.obsCurrent.capacity.value - [_place.chart.yMax doubleValue]) > 1.0)
 	{
 		NSLog(@"Warning: Total capacity volume from observation (%f) is different from yMax value from chart (%f) Label in chart will be incorrect",

@@ -34,6 +34,7 @@
 #import "ChartSeries.h"
 #import "ChartDataset.h"
 #import "ChartValue.h"
+#import "ChartObservation.h"
 #import "Measurement.h"
 #import "Place.h"
 #import "Observation.h"
@@ -46,8 +47,7 @@
 //marker
 @property (nonatomic) int xCoordinate;
 @property (nonatomic) float viewXPosition;
-@property (nonatomic, retain) NSNumber* currentYearYCoordinate;
-@property (nonatomic, retain) NSNumber* lastYearYCoordinate;
+@property (nonatomic, retain) NSMutableArray* yCoordinates;
 
 - (void)updateChart:(Chart*)chart;
 
@@ -58,12 +58,19 @@
 
 @implementation ChartViewController
 
+//percentage value at the top of the visible chart view
+CGFloat const kChartTopYValue = 1.1f;
+
+//Invisible negative padding to fix a plot rendering issue.
+//Anything over kChartTopYValue is not visible but still drawn so that the
+//gradient below the plot is not broken
+CGFloat const kMaxYValue = 4.0f;
+
 @synthesize graph;
 @synthesize markerPlot = _markerPlot;
 @synthesize xCoordinate = _xCoordinate;
 @synthesize viewXPosition = _viewXPosition;
-@synthesize currentYearYCoordinate = _currentYearYCoordinate;
-@synthesize lastYearYCoordinate = _lastYearYCoordinate;
+@synthesize yCoordinates = _yCoordinates;
 @synthesize chartDelegate = _chartDelegate;
 
 - (void)dealloc
@@ -72,8 +79,7 @@
 	[graph release];
 	[place release];
 	[_markerPlot release];
-	[_currentYearYCoordinate release];
-	[_lastYearYCoordinate release];
+	[_yCoordinates release];
 	[super dealloc];
 }
 
@@ -82,11 +88,16 @@
 {
 	if (newPlace != place)
 	{
-		[[NSNotificationCenter defaultCenter] removeObserver:self name:NSManagedObjectContextObjectsDidChangeNotification object:[place managedObjectContext]];
+		[[NSNotificationCenter defaultCenter] removeObserver:self
+														name:NSManagedObjectContextObjectsDidChangeNotification
+													  object:[place managedObjectContext]];
 		[place release];
 		place = [newPlace retain];
 		_chart = place.chart;
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(objectsDidChangeNotification:) name:NSManagedObjectContextObjectsDidChangeNotification object:[place managedObjectContext]];
+		[[NSNotificationCenter defaultCenter] addObserver:self
+												 selector:@selector(objectsDidChangeNotification:)
+													 name:NSManagedObjectContextObjectsDidChangeNotification
+												   object:[place managedObjectContext]];
 	}
 }
 
@@ -103,8 +114,7 @@
 	// e.g. self.myOutlet = nil;
 	self.graph = nil;
 	self.markerPlot = nil;
-	self.currentYearYCoordinate = nil;
-	self.lastYearYCoordinate = nil;
+	self.yCoordinates = nil;
 }
 
 
@@ -125,60 +135,55 @@
 - (void)updateChart:(Chart*)chart
 {
 	assert([NSThread isMainThread]);
-
+	
 	//remove existing plots
 	for (CPPlot* plot in [self.graph allPlots])
 	{
 		[self.graph removePlot:plot];
 	}
-	//dicard potential marker
+	//discard potential marker
 	self.markerPlot = nil;
 	[self.markerLabelDelegate hideLabels];
 	
+	double red = 0.0/255;
+	double green = 186.0/255;
+	double blue = 255.0/255;
+	
 	NSInteger currentYear = [[[NSCalendar gregorian] components:NSYearCalendarUnit fromDate:chart.xEnd] year];
-	NSInteger previousYear = currentYear - 1;
-	
-	ChartSeries* currentYearSeries = nil;
-	ChartSeries* lastYearSeries = nil;
-	for (ChartSeries* series in chart.series)
-	{
-		if ([series.year intValue] == currentYear)
-		{
-			currentYearSeries = series;
-		}
-		else if ([series.year intValue] == previousYear)
-		{
-			lastYearSeries = series;
-		}
-	}
-	NSArray* orderedSeries = [NSArray arrayWithObjects:currentYearSeries, lastYearSeries, nil];
-	
+	NSSortDescriptor *yearDescriptor = [[[NSSortDescriptor alloc] initWithKey:@"year" ascending:NO] autorelease];
+	NSArray* orderedSeries = [[chart.series allObjects] sortedArrayUsingDescriptors:[NSArray arrayWithObject:yearDescriptor]];
 	for (ChartSeries* series in orderedSeries)
 	{
 		float alpha = 0.0f;
-		if ([series.year intValue] == currentYear)
+		int year = [series.year intValue];
+		if (year == currentYear)
 		{
 			alpha = 1.0f;
 		}
-		else if ([series.year intValue] == previousYear)
+		else if (year == currentYear - 1)
 		{
-			alpha = 0.3f;
+			alpha = 0.35f;
 		}
-		
+		else if (year == currentYear - 2)
+		{
+			alpha = 0.15f;
+		}
+		else
+		{
+			continue;
+		}
+
+		CPColor* topPlotColor = [CPColor colorWithComponentRed:red green:green blue:blue alpha:alpha-0.15];
+		CPColor* bottomPlotColor = [CPColor colorWithComponentRed:red green:green blue:blue alpha:alpha-0.3];
+		CPColor* lineColor = [CPColor colorWithComponentRed:1.0 green:1.0 blue:1.0 alpha:alpha];
 		for (ChartDataset* dataset in series.datasets)
 		{
-			CPScatterPlot *plot = [[[CPScatterPlot alloc] 
-									initWithFrame:CGRectNull] autorelease];
-			plot.dataLineStyle.lineColor = [CPColor colorWithComponentRed:1.0 green:1.0 blue:1.0 alpha:alpha];
+			CPScatterPlot *plot = [[[CPScatterPlot alloc] initWithFrame:CGRectNull] autorelease];
+			plot.dataLineStyle.lineColor = lineColor;
 			plot.dataLineStyle.lineWidth = 2.0f;
 			plot.dataSource = dataset;
 			
 			CPGradient* plotGradient = [[[CPGradient alloc] init] autorelease];
-			double red = 0.0/255;
-			double green = 186.0/255;
-			double blue = 255.0/255;
-			CPColor* topPlotColor = [CPColor colorWithComponentRed:red green:green blue:blue alpha:alpha-0.15];
-			CPColor* bottomPlotColor = [CPColor colorWithComponentRed:red green:green blue:blue alpha:alpha-0.3];
 			plotGradient = [plotGradient addColorStop:topPlotColor atPosition:0];
 			plotGradient = [plotGradient addColorStop:bottomPlotColor atPosition:1];
 			plotGradient.angle = 270.0f;
@@ -187,7 +192,6 @@
 			plot.areaBaseValue = CPDecimalFromString(@"0.0");
 			
 			[self.graph addPlot:plot];
-			//NSLog(@"ScatterPlot: %@", plot);
 		}
 	}
 	[self.chartDelegate chartUpdated];
@@ -200,7 +204,7 @@
 	plotSpace.xRange = [CPPlotRange plotRangeWithLocation:CPDecimalFromInteger(1)
 												   length:CPDecimalFromInteger(366)];
 	plotSpace.yRange = [CPPlotRange plotRangeWithLocation:CPDecimalFromFloat(0.0f)
-												   length:CPDecimalFromFloat(1.1f)];
+												   length:CPDecimalFromFloat(kMaxYValue)];
 	
 	CPColor* colorAxis = [CPColor colorWithComponentRed:210.0/255 green:240.0/255 blue:255/255 alpha:1];
 	CPLineStyle* lineStyle = [CPLineStyle lineStyle];
@@ -287,19 +291,17 @@
 	//CorePlot chart rendering
 	self.graph = [[[CPXYGraph alloc] initWithFrame:CGRectZero] autorelease];
 	
-	self.graph.paddingLeft = 0.0;
-	self.graph.paddingBottom = 0.0;
-	self.graph.paddingRight = 0.0;
-	self.graph.paddingTop = 0.0;
+	self.graph.paddingLeft = 0.0f;
+	self.graph.paddingBottom = 0.0f;
+	self.graph.paddingRight = 0.0f;
+	self.graph.paddingTop = 0.0f;
 	
-	self.graph.plotAreaFrame.paddingLeft = 0.0;
-	self.graph.plotAreaFrame.paddingBottom = 0.0;
-	self.graph.plotAreaFrame.paddingRight = 0.0;
-	self.graph.plotAreaFrame.paddingTop = 0.0; //10.0
-	
+	self.graph.plotAreaFrame.paddingLeft = 0.0f;
+	self.graph.plotAreaFrame.paddingBottom = 0.0f;
+	self.graph.plotAreaFrame.paddingRight = 0.0f;
+	self.graph.plotAreaFrame.paddingTop = (kChartTopYValue - kMaxYValue) / kChartTopYValue * self.view.frame.size.height;
 	
 	//create background
-	
 	CPGradient *backgroundGradient = [[[CPGradient alloc] init] autorelease];
 	CPColor* topBackgroundColor = [CPColor colorWithComponentRed:9.0/255.0 green:102.0/255.0 blue:180.0/255.0 alpha:1.0];
 	CPColor* bottomBackgroundColor = [CPColor colorWithComponentRed:4.0/255.0 green:77.0/255.0 blue:123.0/255.0 alpha:1.0];
@@ -341,82 +343,48 @@
 }
 
 
-- (void)updateChartValues
+- (void)updateMarkerValues
 {
-	
-	ChartSeries* currentYearSeries = nil;
-	ChartSeries* lastYearSeries = nil;
-	
-	NSCalendar* gregorian = [NSCalendar gregorian];
 	Chart* chart = self.place.chart;
 
-	NSDateComponents* compsCurrent = [gregorian components:NSYearCalendarUnit fromDate:chart.xEnd];
-	NSDateComponents* compsLast = [[[NSDateComponents alloc] init] autorelease];
-	[compsLast setYear:[compsCurrent year] - 1];
-
-	for (ChartSeries* series in chart.series)
-	{
-		if ([series.year intValue] == compsCurrent.year)
-		{
-			currentYearSeries = series;
-		}
-		else if ([series.year intValue] == compsLast.year)
-		{
-			lastYearSeries = series;
-		}
-	}
-
-	if (self.xCoordinate > 31 + 28 && ![NSCalendar isLeapYear:[currentYearSeries.year intValue]]) {
-		[compsCurrent setDay:self.xCoordinate - 1];
-	} else {
-		[compsCurrent setDay:self.xCoordinate];
-	}
-	if (self.xCoordinate > 31 + 28 && ![NSCalendar isLeapYear:[lastYearSeries.year intValue]]) {
-		[compsLast setDay:self.xCoordinate - 1];
-	} else {
-		[compsLast setDay:self.xCoordinate];
-	}
-	NSDate* currentYearDate = [gregorian dateFromComponents:compsCurrent];
-	NSDate* lastYearDate = [gregorian dateFromComponents:compsLast];
-
-	ChartValue* currentYearValue = [currentYearSeries getValueForDayInYear:self.xCoordinate];
-	ChartValue* lastYearValue = [lastYearSeries getValueForDayInYear:self.xCoordinate];
-	self.currentYearYCoordinate = currentYearValue ? [NSNumber numberWithDouble:currentYearValue.percentage] : nil;
-	self.lastYearYCoordinate = lastYearValue ? [NSNumber numberWithDouble:lastYearValue.percentage] : nil;
+	NSCalendar* gregorian = [NSCalendar gregorian];
+	NSInteger currentYear = [[gregorian components:NSYearCalendarUnit fromDate:chart.xEnd] year];
 	
 	//WARNING Assert that unit is volume, can only be checked from yAxisLabel in parenthesis based on current chart XML format
-	Measurement* currentYearPercentage= nil;
-	Measurement* currentYearVolume = nil;
-	NSString* unit = place.obsCurrent.capacity.unit ?: @"ML";
-	if (currentYearValue)
-	{
-		currentYearPercentage = [[[Measurement alloc] init] autorelease];
-		currentYearPercentage.unit = @"%";
-		currentYearPercentage.value = currentYearValue.percentage * 100.0;
-		currentYearVolume = [[[Measurement alloc] init] autorelease];
-		currentYearVolume.unit = unit;
-		currentYearVolume.value = currentYearValue.value;
-	}
-	Measurement* lastYearPercentage= nil;
-	Measurement* lastYearVolume = nil;
-	if (lastYearValue)
-	{
-		lastYearPercentage = [[[Measurement alloc] init] autorelease];
-		lastYearPercentage.unit = @"%";
-		lastYearPercentage.value = lastYearValue.percentage * 100.0;
-		lastYearVolume = [[[Measurement alloc] init] autorelease];
-		lastYearVolume.unit = unit;
-		lastYearVolume.value = lastYearValue.value;
-	}	
+	NSString* volumeUnit = place.obsCurrent.capacity.unit ?: @"ML";
 	
-	[self.markerLabelDelegate
-	 showLabelsCurrentYearDate:currentYearDate
-		 currentYearPercentage:currentYearPercentage
-			 currentYearVolume:currentYearVolume
-				  lastYearDate:lastYearDate
-			lastYearPercentage:lastYearPercentage
-				lastYearVolume:lastYearVolume 
-					  awayFrom:self.viewXPosition];
+	NSMutableArray* observations = [NSMutableArray arrayWithCapacity:3];
+	self.yCoordinates = [NSMutableArray arrayWithCapacity:3+2];
+	[self.yCoordinates addObject:[NSNumber numberWithInt:-10]];
+	for (NSInteger yearIndex = currentYear; yearIndex > currentYear - 3; yearIndex--)
+	{
+		NSPredicate* predicate = [NSPredicate predicateWithFormat:@"year == %@", [NSNumber numberWithInt:yearIndex]];
+		ChartSeries* yearSeries = [[chart.series filteredSetUsingPredicate:predicate] anyObject];
+		
+		NSDateComponents* dateComps = [[[NSDateComponents alloc] init] autorelease];
+		[dateComps setYear:yearIndex];
+		if (self.xCoordinate > 31 + 28 && ![NSCalendar isLeapYear:yearIndex]) {
+			[dateComps setDay:self.xCoordinate - 1];
+		} else {
+			[dateComps setDay:self.xCoordinate];
+		}
+		
+		NSDate* date = [gregorian dateFromComponents:dateComps];
+		ChartValue* yearValue = [yearSeries getValueForDayInYear:self.xCoordinate];
+		
+		Measurement* percentageVolume = nil;
+		Measurement* volume = nil;
+		if (yearValue) {
+			percentageVolume = [Measurement measurementWithUnit:@"%" value:yearValue.percentage * 100.0];
+			volume = [Measurement measurementWithUnit:volumeUnit value:yearValue.value];
+			[(NSMutableArray*)self.yCoordinates addObject:[NSNumber numberWithDouble:yearValue.percentage]];
+		}
+		[observations addObject:[ChartObservation chartObservationWithDate:date
+														  percentageVolume:percentageVolume
+																	volume:volume]];
+	}
+	[self.yCoordinates addObject:[NSNumber numberWithInt:10]];
+	[self.markerLabelDelegate showLabelsForChartObservations:observations awayFrom:self.viewXPosition];
 }
 
 -(CGPoint)viewCoordinatesForChartPoint:(NSDecimal*)chartPoint
@@ -467,7 +435,7 @@
 	self.viewXPosition = point.x;
 	
 	CPColor* yellow = [CPColor colorWithComponentRed:0.9 green:0.80 blue:0.05 alpha:1.0];
-	[self updateChartValues];
+	[self updateMarkerValues];
 	
 	CPLineStyle *symbolLineStyle = [CPLineStyle lineStyle];
 	symbolLineStyle.lineColor = yellow;
@@ -506,7 +474,7 @@
 		if (self.xCoordinate != x) {
 			self.xCoordinate = x;
 			self.viewXPosition = point.x;
-			[self updateChartValues];
+			[self updateMarkerValues];
 			[self.markerPlot reloadData];
 		}
 	}
@@ -546,46 +514,24 @@
 
 -(NSUInteger)numberOfRecordsForPlot:(CPPlot *)plot
 {
-	return 4;
+	return [self.yCoordinates count];
 }
 
 
 -(NSArray*)numbersForPlot:(CPPlot*)plot field:(NSUInteger)fieldEnum  
 		 recordIndexRange:(NSRange)indexRange
 {
-	NSMutableArray* result;
-	if(fieldEnum == CPScatterPlotFieldX)
+	if (fieldEnum == CPScatterPlotFieldX)
 	{
-		result = [NSArray arrayWithObjects:
-				  [NSNumber numberWithInt:_xCoordinate],
-				  [NSNumber numberWithInt:_xCoordinate],
-				  [NSNumber numberWithInt:_xCoordinate],
-				  [NSNumber numberWithInt:_xCoordinate],
-				  nil];
-	}
-	else
-	{
+		NSMutableArray* result = [NSMutableArray arrayWithCapacity:[self.yCoordinates count]];
+		for (int i=0; i<[self.yCoordinates count]; i++) {
+			[result addObject:[NSNumber numberWithInt:_xCoordinate]];
+		}
+		return result;
+	} else {
 		//CPScatterPlotFieldY
-		result = [[[NSMutableArray alloc] initWithCapacity:3] autorelease];
-		[result addObject:[NSNumber numberWithInt:-10]];
-		if (_currentYearYCoordinate) {
-			[result addObject:_currentYearYCoordinate];
-		}
-		else
-		{
-			[result addObject:[NSNumber numberWithInt:-10]];
-		}
-		if (_lastYearYCoordinate) {
-			[result addObject:_lastYearYCoordinate];
-		}
-		else
-		{
-			[result addObject:[NSNumber numberWithInt:-10]];
-		}
-		[result addObject:[NSNumber numberWithInt:10]];
-		//NSLog(@"points: %@", result);
+		return self.yCoordinates;
 	}
-	return result;
 }
 
 @end

@@ -81,6 +81,7 @@
 			if (place.chart)
 			{
 				[self.context deleteObject:place.chart];
+				place.chart = nil;
 				[self.context saveAndLogErrors];
 			}
 			return NO;

@@ -36,6 +36,7 @@
 #import "Chart.h"
 #import "Observation.h"
 #import "Measurement.h"
+#import "ChartObservation.h"
 #import "CalendarHelpers.h"
 
 
@@ -49,34 +50,30 @@
 
 @implementation LandscapeViewController
 
+//marker overlay labels are identified using tags (in view attributes)
+NSInteger const kTagLabelsStart = 3;
+NSInteger const kTagLabelElementSize = 3;
+NSInteger const kTagDateOffset = 0;
+NSInteger const kTagPercentageOffset = 1;
+NSInteger const kTagVolumeOffset = 2;
+
 @synthesize delegate = _delegate;
 @synthesize titleNavigationItem = _titleNavigationItem;
 @synthesize place = _place;
 @synthesize chartViewController = _chartViewController;
 @synthesize valuesOverlay = _valuesOverlay;
 @synthesize valuesOverlayIsVisible = _valuesOverlayIsVisible;
-@synthesize currentYearDate = _currentYearDate;
-@synthesize currentYearPercentage = _currentYearPercentage;
-@synthesize currentYearVolume = _currentYearVolume;
-@synthesize lastYearDate = _lastYearDate;
-@synthesize lastYearPercentage = _lastYearPercentage;
-@synthesize lastYearVolume = _lastYearVolume;
 @synthesize chartTotalCapacityLabel = _chartTotalCapacityLabel;
 @synthesize chartTotalCapacityPercentageLabel = _chartTotalCapacityPercentageLabel;
 
 
 - (void)dealloc
 {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[_titleNavigationItem release];
 	[_place release];
 	[_chartViewController release];
 	[_valuesOverlay release];
-	[_currentYearDate release];
-	[_currentYearPercentage release];
-	[_currentYearVolume release];
-	[_lastYearDate release];
-	[_lastYearPercentage release];
-	[_lastYearVolume release];
 	[_chartTotalCapacityLabel release];
 	[_chartTotalCapacityPercentageLabel release];
     [super dealloc];
@@ -86,12 +83,6 @@
 {
 	self.titleNavigationItem = nil;
 	self.valuesOverlay = nil;
-	self.currentYearDate = nil;
-	self.currentYearPercentage = nil;
-	self.currentYearVolume = nil;
-	self.lastYearDate = nil;
-	self.lastYearPercentage = nil;
-	self.lastYearVolume = nil;
 	self.chartTotalCapacityLabel = nil;
 	self.chartTotalCapacityPercentageLabel = nil;
 	[super viewDidUnload];
@@ -154,6 +145,7 @@
 	self.valuesOverlay.alpha = 0.0f;
 	self.valuesOverlay.layer.cornerRadius = 3.0f;
 	[self.valuesOverlay viewWithTag:1].layer.cornerRadius = 3.0f;
+	[self.valuesOverlay viewWithTag:2].layer.cornerRadius = 3.0f;
 	self.chartViewController.chartDelegate = self;
 	self.chartTotalCapacityLabel.layer.cornerRadius = 2.0f;
 	self.chartTotalCapacityPercentageLabel.layer.cornerRadius = 2.0f;
@@ -163,6 +155,10 @@
 {
 	[self.chartViewController viewWillAppear:animated];
     [super viewWillAppear:animated];
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(loadDataIfNeeded:)
+												 name:UIApplicationDidBecomeActiveNotification
+											   object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -184,9 +180,19 @@
 
 - (void)viewDidDisappear:(BOOL)animated
 {
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
 	[super viewDidDisappear:animated];
 	[self.chartViewController viewDidDisappear:animated];
-	[self.delegate landscapeViewControllerDidDisappear];
+}
+
+//notification is passed when this method is called from an event
+- (void)loadDataIfNeeded:(NSNotification*)notification
+{
+	if (self.place) {
+		//load chart first
+		[[DataManager manager] loadChartForPlace:self.place force:NO];
+		[[DataManager manager] loadPlace:self.place entire:YES force:NO];
+	}
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -213,20 +219,32 @@
 
 #pragma mark MarkerLabelDelegate protocol
 
--(void)showLabelsCurrentYearDate:(NSDate*)currentYearDate
-		   currentYearPercentage:(Measurement*)currentYearPercentage
-			   currentYearVolume:(Measurement*)currentYearVolume
-					lastYearDate:(NSDate*)lastYearDate
-			  lastYearPercentage:(Measurement*)lastYearPercentage
-				  lastYearVolume:(Measurement*)lastYearVolume
+-(void)showLabelsForChartObservations:(NSArray*)observations
 						awayFrom:(float)viewXPosition
 {
-	self.currentYearDate.text = [[currentYearDate readableDateNoWeekDay] uppercaseString];
-	[self.currentYearPercentage setMeasurementAsPercentage:currentYearPercentage forceSign:NO];
-	[self.currentYearVolume setMeasurementAsVolume:currentYearVolume forceSign:NO];
-	self.lastYearDate.text = [[lastYearDate readableDateNoWeekDay] uppercaseString];
-	[self.lastYearPercentage setMeasurementAsPercentage:lastYearPercentage forceSign:NO];
-	[self.lastYearVolume setMeasurementAsVolume:lastYearVolume forceSign:NO];
+	NSMutableString* spokenMessage = nil;
+	if (UIAccessibilityIsVoiceOverRunning != nil && UIAccessibilityIsVoiceOverRunning()) {
+		spokenMessage = nil;[NSMutableString stringWithCapacity:100];
+	}
+	for (NSInteger i = 0; i < [observations count]; i++)
+	{
+		ChartObservation* obs = [observations objectAtIndex:i];
+		NSInteger blockOffset = kTagLabelsStart + i * kTagLabelElementSize;
+		UILabel* dateLabel = (UILabel*)[self.valuesOverlay viewWithTag:(blockOffset + kTagDateOffset)];
+		dateLabel.text = [[obs.date readableDateNoWeekDay] uppercaseString];
+		[spokenMessage appendString:dateLabel.text];
+		[spokenMessage appendString:@" "];
+		
+		UILabel* percentageLabel = (UILabel*)[self.valuesOverlay viewWithTag:(blockOffset + kTagPercentageOffset)];
+		[percentageLabel setMeasurementAsPercentage:obs.percentageVolume forceSign:NO];
+		[spokenMessage appendString:percentageLabel.accessibilityLabel];
+		[spokenMessage appendString:@" "];
+		
+		UILabel* volumeLabel = (UILabel*)[self.valuesOverlay viewWithTag:(blockOffset + kTagVolumeOffset)];
+		[volumeLabel setMeasurementAsVolume:obs.volume forceSign:NO];
+		[spokenMessage appendString:volumeLabel.accessibilityLabel];
+		[spokenMessage appendString:@" "];
+	}
 	CGRect frame = self.valuesOverlay.frame;
 	float margin = 20.0f;
 	float leftLimit = frame.size.width + margin;
@@ -255,19 +273,7 @@
 	self.valuesOverlayIsVisible = YES;
 	
 	if (UIAccessibilityIsVoiceOverRunning != nil && UIAccessibilityIsVoiceOverRunning()) {
-		NSMutableString* message = [NSMutableString stringWithCapacity:50];
-		[message appendString:self.currentYearDate.text];
-		[message appendString:@" "];
-		[message appendString:self.currentYearPercentage.accessibilityLabel];
-		[message appendString:@" "];
-		[message appendString:self.currentYearVolume.accessibilityLabel];
-		[message appendString:@" "];
-		[message appendString:self.lastYearDate.text];
-		[message appendString:@" "];
-		[message appendString:self.lastYearPercentage.accessibilityLabel];
-		[message appendString:@" "];
-		[message appendString:self.lastYearVolume.accessibilityLabel];
-		UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, message); 
+		UIAccessibilityPostNotification(UIAccessibilityAnnouncementNotification, spokenMessage);
 	}
 }
 

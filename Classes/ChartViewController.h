@@ -39,12 +39,10 @@
 
 @protocol MarkerLabelDelegate
 
-- (void)showLabelsCurrentYearDate:(NSDate*)date
-		   currentYearPercentage:(Measurement*)currentYearPercentage
-			   currentYearVolume:(Measurement*)currentYearVolume
-					lastYearDate:(NSDate*)date
-			  lastYearPercentage:(Measurement*)lastYearPercentage
-				  lastYearVolume:(Measurement*)lastYearVolume
+// observations is to be an array of ChartObservation, starting from current year, last year...
+// if there is no value for a given year, ChartObservation with date and
+// nil Measurement for volume and percentage should be given
+- (void)showLabelsForChartObservations:(NSArray*)observations
 						awayFrom:(float)viewXPosition;
 
 - (void)hideLabels;
@@ -70,8 +68,7 @@
 	id <ChartDelegate> _chartDelegate;
 	int _xCoordinate;
 	float _viewXPosition;
-	NSNumber* _currentYearYCoordinate;
-	NSNumber* _lastYearYCoordinate;
+	NSMutableArray* _yCoordinates;
 }
 
 @property (nonatomic, retain) Place* place;

@@ -3,6 +3,15 @@ Release Notes: Water Storage iPhone App
 =======================================
 
 
+v1.1 -- Mon 7 Feb 2011
+
+* Fixed a crash that was caused by an incorrectly configured AWRIS server.
+* Added a third year plot to the chart.
+* Check for and refresh old data upon wake up.
+* Fixed a minor issue where a chart for the wrong place could appear in landscape view.
+* Fixed a minor issue with the appearance of charts with values exceeding 110%.
+
+
 v1.0 -- Tue 19 Oct 2010
 
 Submitted for App Store approval.

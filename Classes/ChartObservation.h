@@ -1,9 +1,8 @@
 //
-//  Measurement.h
+//  ChartObservation.h
 //  Slake
 //
-//  Created by Ben Williamson on 25/05/10.
-//
+//  Created by Quentin Leseney on 13/01/11.
 //  Copyright (c) 2010 Bureau of Meteorology
 //  All rights reserved.
 //
@@ -29,35 +28,23 @@
 //  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
-#import <Foundation/Foundation.h>
+//  Light version of Observation class and not a managed object
 
+@class Measurement;
 
-@interface Measurement : NSObject <NSCoding> {
-	double value;
-	NSString* unit;
+@interface ChartObservation : NSObject
+{
+	NSDate* _date;
+	Measurement* _percentageVolume;
+	Measurement* _volume;
 }
 
-@property (nonatomic) double value;
-@property (nonatomic, copy) NSString* unit;
+@property (nonatomic, retain) NSDate* date;
+@property (nonatomic, retain) Measurement* percentageVolume;
+@property (nonatomic, retain) Measurement* volume;
 
-+ (Measurement*)measurementWithUnit:(NSString*)unit value:(double)value;
-
-// Returns the measurement formatted as a percentage.
-- (NSString*) textAsPercentageForceSign:(BOOL)forceSign;
-
-// Returns the measurement formatted as a volume.
-- (NSString*) textAsVolumeForceSign:(BOOL)forceSign;
-
-// Returns green if positive, red if negative, black if zero.
-- (UIColor*) changeColour;
-
-@end
-
-
-@interface UILabel (Measurement)
-
-- (void)setMeasurementAsPercentage:(Measurement*)measurement forceSign:(BOOL)forceSign;
-
-- (void)setMeasurementAsVolume:(Measurement*)measurement forceSign:(BOOL)forceSign;
++ (ChartObservation*)chartObservationWithDate:(NSDate*)date 
+							 percentageVolume:(Measurement*)percentageVolume
+									   volume:(Measurement*)volume;
 
 @end
