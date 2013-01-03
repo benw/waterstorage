@@ -3,11 +3,16 @@ Water Storage
 
 <http://www.bom.gov.au/water/waterstorage/iphone.shtml>
 
-Copyright (c) 2010, Bureau of Meteorology
+Copyright (c) 2013, 2010, Bureau of Meteorology
 All rights reserved.
 
 This software is made available under the terms of the simplified
 BSD license. See the LICENSE.txt file for full terms and copyright details.
+
+This app fetches data from different sources using Creative Commons and other
+copyright licences. Any redistribution of this application that makes use of
+that data must cite the relevant data providers and licences.
+Details are available here: http://www.bom.gov.au/water/waterstorage/copyright.php 
 
 
 Description
