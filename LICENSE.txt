@@ -2,7 +2,22 @@
 Water Storage for iPhone: http://www.bom.gov.au/water/waterstorage/iphone.shtml
 
 Copyright (c) 2010 Bureau of Meteorology
-All rights reserved.
+
+The Water Storage for iPhone App is protected by copyright. Subject to the
+restrictions set out below, you may use the source code and other material that
+make up the App (excluding the data supplied in the App itself which is subject
+to the terms and conditions set out in the copyright notice included in the
+App) in accordance with the BSD licence terms set out below.
+
+Restrictions: The BSD licences below do not apply to any artwork or other
+graphics, logos (including the Bureau of Meteorology logo) of the Water Storage
+for iPhone App. You must seek written approval from the Bureau of Meteorology
+for the use of such material, except where permitted under the Copyright Act
+1968. The Bureau will not agree to any use which creates an exact copy of the
+Water Storage for iPhone App or a reproduction which is similar to the Water
+Storage for iPhone App.
+
+
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
